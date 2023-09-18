@@ -58,11 +58,6 @@ function App() {
 }
 
 function Header() {
-    //     const style = {
-    //         color: "red",
-    //         fontSize: "40px",
-    //         textTransform: "upperCase",
-    //     };
     return (
         <header className="header">
             <h1 style={{}}>Fast React Pizza Co.</h1>
@@ -78,41 +73,37 @@ function Menu() {
     return (
         <main className="menu">
             <h2>Our Menu</h2>
+
             {numPizas > 0 ? (
-                <ul className="pizzas">
-                    {pizzas.map((pizza) => (
-                        <Pizza pizzaObj={pizza} key={pizza.name} />
-                    ))}
-                </ul>
+                <>
+                    <p>
+                        Authentic Indian Cuisine. 6 Creative dishes to choose
+                        from. All from our stone oven, all organic and
+                        delicious.
+                    </p>
+                    <ul className="pizzas">
+                        {pizzas.map((pizza) => (
+                            <Pizza pizzaObj={pizza} key={pizza.name} />
+                        ))}
+                    </ul>
+                </>
             ) : (
                 <p>We are still working on our menu, please come back later</p>
             )}
-
-            {/* <Pizza
-                name="Pizza Spinaci"
-                ingredients="Tomato, mozarella, spinach, and ricotta cheese"
-                photoName="pizzas/spinaci.jpg"
-                price={10}
-            />
-            <Pizza
-                name="Pizza Funghi"
-                ingredients="Tomato, Mushrooms"
-                photoName="pizzas/funghi.jpg"
-                price={12}
-            /> */}
         </main>
     );
 }
 
-function Pizza(props) {
-    console.log(props);
+function Pizza({ pizzaObj }) {
+    console.log(pizzaObj);
     return (
-        <li className="pizza">
-            <img src={props.pizzaObj.photoName} alt={props.name} />
+        <li className={`pizza ${pizzaObj.soldOut ? "sold-out" : ""}`}>
+            <img src={pizzaObj.photoName} alt={pizzaObj.name} />
             <div>
-                <h3>{props.pizzaObj.name}</h3>
-                <p>{props.pizzaObj.ingredients}</p>
-                <span>{props.pizzaObj.price}</span>
+                <h3>{pizzaObj.name}</h3>
+                <p>{pizzaObj.ingredients}</p>
+
+                <span>{pizzaObj.soldOut ? "SOLD OUT" : pizzaObj.price}</span>
             </div>
         </li>
     );
@@ -122,18 +113,14 @@ function Footer() {
     const hour = new Date().getHours();
     console.log(hour);
     const openHour = 8;
-    const closeHour = 22;
+    const closeHour = 24;
     const isOpen = hour >= openHour && hour <= closeHour;
     console.log(isOpen);
-    //     if (hour >= 12 && hour <= 22) alert("We are currently Open!");
-    //     else alert("We are currently Closed!");
+
     return (
         <footer className="footer">
             {isOpen ? (
-                <p>
-                    We are Open until {closeHour}.00. Come visit us or Order
-                    Online
-                </p>
+                <Order closeHour={closeHour} openHour={openHour} />
             ) : (
                 <p>
                     We are happy to welcome u between {openHour} and {closeHour}
@@ -143,9 +130,57 @@ function Footer() {
     );
 }
 
+function Order({ closeHour, openHour }) {
+    return (
+        <div className="order">
+            <p>
+                We are Open from {openHour}.00 until {closeHour}.00, Come visit
+                us or Order ok Online
+            </p>
+            <button className="btn">Order</button>
+        </div>
+    );
+}
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
     <React.StrictMode>
         <App />
     </React.StrictMode>
 );
+
+/*
+WARNING : --> DO NOT UNCOMMENT THIS : THIS IS FOR REFERENCE ONLY.
+----------Inline CSS : ->
+    const style = {
+        color: "red",
+        fontSize: "40px",
+        textTransform: "upperCase",
+    };
+------------------
+Props removed this------------ 
+    <Pizza
+        name="Pizza Spinaci"
+        ingredients="Tomato, mozarella, spinach, and ricotta cheese"
+        photoName="pizzas/spinaci.jpg"
+        price={10}
+    />
+    <Pizza
+        name="Pizza Funghi"
+        ingredients="Tomato, Mushrooms"
+        photoName="pizzas/funghi.jpg"
+        price={12}
+    /> 
+--------------------
+sold out code
+    {pizzaObj.soldOut ? 
+    (
+        <span>SOLD OUT</span>
+    ) : (
+        <span>pizzaObj.price</span>
+    )}
+-----------------------
+hours
+    if (hour >= 12 && hour <= 22) alert("We are currently Open!");
+    else alert("We are currently Closed!");
+*/
